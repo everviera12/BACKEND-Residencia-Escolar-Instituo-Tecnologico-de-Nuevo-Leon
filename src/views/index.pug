@@ -1,5 +1,29 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  h2(class="section-title") Clientes API Routes
+  ul(class="routes")
+    li 
+      a(href="/clientes") GET /clientes
+    li GET /cliente/:id
+    li POST /cliente
+    li PUT /cliente/:id
+    li DELETE /cliente/:id
+
+  h2(class="section-title") Instalaciones API Routes
+  ul(class="routes")
+    li 
+      a(href="/instalaciones") GET /instalaciones
+    li GET /instalacion/:id
+    li POST /instalacion
+    li PUT /instalacion/:id
+    li DELETE /instalacion/:id
+
+  h2(class="section-title") Productos API Routes
+  ul(class="routes")
+    li 
+      a(href="/productos") GET /productos
+    li GET /producto/:id
+    li POST /producto
+    li PUT /producto/:id
+    li DELETE /producto/:id
