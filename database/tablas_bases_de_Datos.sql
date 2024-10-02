@@ -1,3 +1,33 @@
+/*
+Tabla: usuarios
+Esta tabla almacena la información de los usuarios registrados en el sistema.
+
+Columnas:
+-- id: Clave primaria de la tabla, de tipo entero, autoincremental (SERIAL).
+-- nombre: Nombre completo del usuario, de tipo VARCHAR(100), obligatorio.
+-- usuario: Nombre de usuario, de tipo VARCHAR(50), único y obligatorio.
+-- email: Dirección de correo electrónico del usuario, de tipo VARCHAR(150), único y obligatorio.
+-- contraseña: Contraseña del usuario, de tipo VARCHAR(255), obligatorio.
+-- rol: Rol asignado al usuario, de tipo VARCHAR(50), opcional.
+-- estado: Estado de la cuenta, de tipo BOOLEAN, con valor predeterminado TRUE, opcional.
+
+Descripción:
+-- Esta tabla almacena la información básica de los usuarios, incluyendo su nombre, nombre de usuario, correo electrónico, contraseña, rol, y el estado de la cuenta.
+-- El campo `id` se genera automáticamente para cada usuario, lo que lo hace único dentro de la tabla.
+-- Los campos `usuario` y `email` son únicos, lo que garantiza que no habrá duplicados en estas columnas.
+-- El campo `estado` indica si la cuenta del usuario está activa (TRUE) o inactiva (FALSE).
+*/
+CREATE TABLE usuarios (
+    id SERIAL PRIMARY KEY,       
+    nombre VARCHAR(100) NOT NULL,
+    usuario VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL, 
+    contraseña VARCHAR(255) NOT NULL, 
+    rol VARCHAR(50)
+    estado BOOLEAN DEFAULT TRUE       
+);
+
+
 /* 
 Tabla: clientes
 Esta tabla almacena la información relacionada con los clientes. 
@@ -95,4 +125,28 @@ INSERT INTO instalaciones (cliente_id, producto_id, fecha_instalacion, costo_ins
 (2, 1, '2024-01-30', 45.00, 'Completado'),
 (3, 3, '2024-03-10', 30.00, 'Completado'),
 (4, 4, '2024-04-05', 100.00, 'Pendiente');
+
+
+/* 
+Esta consulta SQL se utiliza para obtener la información detallada de las instalaciones,
+incluyendo los nombres del cliente y del producto asociados, en lugar de solo sus IDs.
+  
+  - i: Alias para la tabla "instalaciones".
+  - c: Alias para la tabla "clientes".
+  - p: Alias para la tabla "productos".
+  
+  La consulta hace un JOIN (unión) entre las tablas "instalaciones", "clientes", y "productos"
+  para asociar los datos relevantes.
+
+  - i.*: Selecciona todas las columnas de la tabla "instalaciones".
+  - c.nombre AS cliente_nombre: Obtiene el nombre del cliente desde la tabla "clientes" y lo asigna como "cliente_nombre".
+  - p.nombre AS producto_nombre: Obtiene el nombre del producto desde la tabla "productos" y lo asigna como "producto_nombre".
+
+  Esto permite mostrar en los resultados el nombre del cliente y del producto en lugar de sus IDs, 
+  facilitando una mejor comprensión en un sistema de inventario o gestión de instalaciones.
+*/
+SELECT i.*, c.nombre AS cliente_nombre, p.nombre AS producto_nombre
+FROM instalaciones i
+JOIN clientes c ON i.cliente_id = c.id
+JOIN productos p ON i.producto_id = p.id;
 
