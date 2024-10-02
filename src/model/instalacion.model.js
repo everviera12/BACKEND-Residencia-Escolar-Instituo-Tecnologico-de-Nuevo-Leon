@@ -1,7 +1,21 @@
 const db = require("../../config/database");
 
+// const getAllInstalaciones = async () => {
+//   const result = await db.query("SELECT * FROM instalaciones");
+//   return result.rows;
+// };
+
+
 const getAllInstalaciones = async () => {
-  const result = await db.query("SELECT * FROM instalaciones");
+  const result = await db.query(`
+    SELECT 
+      i.*, 
+      c.nombre AS cliente_nombre, 
+      p.nombre AS producto_nombre 
+    FROM instalaciones i
+    JOIN clientes c ON i.cliente_id = c.id
+    JOIN productos p ON i.producto_id = p.id
+  `);
   return result.rows;
 };
 
