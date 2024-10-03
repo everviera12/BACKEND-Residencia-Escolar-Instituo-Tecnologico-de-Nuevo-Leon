@@ -46,9 +46,44 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const createUser = async (req, res) => {
+  const { nombre, usuario, email, contraseña, rol } = req.body;
+  try {
+    const newUser = await usuariosModel.createUser(nombre, usuario, email, contraseña, rol);
+    res.status(201).json(newUser);
+  } catch (error) {
+    console.error(error);
+    if (error.code === '23505') { 
+      return res.status(409).json({ message: 'El usuario o email ya existe' });
+    }
+    res.status(500).send("Error interno del servidor");
+  }
+};
+
+// Nuevo método de login
+const login = async (req, res) => {
+  const { usuario, contraseña } = req.body;
+  try {
+    const user = await usuariosModel.authenticateUser(usuario, contraseña);
+
+    if (user) {
+      res.cookie('admin', true, { httpOnly: true });
+      return res.status(200).json({ message: 'Inicio de sesión exitoso' });
+    } else {
+      return res.status(401).json({ message: 'Credenciales incorrectas' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error interno del servidor");
+  }
+};
+
+
 
 module.exports = {
   getAllUsers,
   deleteUser,
   getUserById,
+  createUser,
+  login,
 };
