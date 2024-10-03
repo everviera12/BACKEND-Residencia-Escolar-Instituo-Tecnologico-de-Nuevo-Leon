@@ -53,7 +53,7 @@ const createUser = async (req, res) => {
     res.status(201).json(newUser);
   } catch (error) {
     console.error(error);
-    if (error.code === '23505') { 
+    if (error.code === '23505') {
       return res.status(409).json({ message: 'El usuario o email ya existe' });
     }
     res.status(500).send("Error interno del servidor");
@@ -67,8 +67,12 @@ const login = async (req, res) => {
     const user = await usuariosModel.authenticateUser(usuario, contraseña);
 
     if (user) {
-      res.cookie('admin', true, { httpOnly: true });
-      return res.status(200).json({ message: 'Inicio de sesión exitoso' });
+      res.cookie(`admin-${user.usuario}`, true, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Strict',
+        maxAge: 24 * 60 * 60 * 1000 // 1 dia de duracion
+      }); return res.status(200).json({ message: 'Inicio de sesión exitoso' });
     } else {
       return res.status(401).json({ message: 'Credenciales incorrectas' });
     }
@@ -77,8 +81,6 @@ const login = async (req, res) => {
     res.status(500).send("Error interno del servidor");
   }
 };
-
-
 
 module.exports = {
   getAllUsers,

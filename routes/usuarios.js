@@ -6,13 +6,9 @@ const checkAdminCookie = require("../config/middleware/auth");
 // validamos la cookie
 router.use(checkAdminCookie);
 
-
 router.get("/", usuariosController.getAllUsers);
 router.get("/usuario/:id", usuariosController.getUserById);
 router.post("/usuario", usuariosController.createUser);
 router.delete("/usuario/:id", usuariosController.deleteUser);
-
-
-// router.post("/login", usuariosController.login); 
 
 module.exports = router;
