@@ -21,7 +21,7 @@ const getProductById = async (req, res) => {
 
     res.status(200).json(producto);
   } catch (error) {
-    console.error(err);
+    console.error(error);
     res.status(500).send("Error interno del servidor");
   }
 };
@@ -40,7 +40,7 @@ const addNewProduct = async (req, res) => {
 const editProduct = async (req, res) => {
   try {
     const productsData = req.body;
-    const productDataWhitId = { ...productsData, id: req.params.id }
+    const productDataWhitId = { ...productsData, id: req.params.id };
     const productUpdated = await productosModel.editProduct(productDataWhitId);
 
     if (!productUpdated) {
@@ -60,18 +60,22 @@ const deleteProduct = async (req, res) => {
     if (!productsDeleted) {
       return res.status(404).send("Producto no encontrado");
     }
-    res.status(200).json({ message: "Producto eliminado correctamente", client: productsDeleted });
+    res
+      .status(200)
+      .json({
+        message: "Producto eliminado correctamente",
+        client: productsDeleted,
+      });
   } catch (err) {
     console.error(err);
     res.status(500).send("Error interno del servidor");
   }
 };
 
-
 module.exports = {
   getAllProducts,
   getProductById,
   addNewProduct,
   editProduct,
-  deleteProduct
+  deleteProduct,
 };

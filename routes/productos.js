@@ -1,9 +1,3 @@
-// id SERIAL PRIMARY KEY,
-// nombre TEXT NOT NULL,
-// descripcion TEXT,
-// precio NUMERIC(10, 2) NOT NULL,
-// stock INT NOT NULL
-
 const express = require("express");
 const router = express.Router();
 const productosController = require("../src/controller/productos.controller");
