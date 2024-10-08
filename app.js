@@ -23,10 +23,19 @@ app.use(
         callback(new Error("No permitido por CORS"));
       }
     },
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Métodos permitidos
-    // allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); 
+  res.header("Access-Control-Allow-Origin", "http://localhost:3001"); 
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
+
 
 // view engine setup
 app.set("views", path.join(__dirname, "/src/views"));
@@ -43,6 +52,7 @@ app.use("/usuarios", usuariosRouter);
 app.use("/clientes", clientesRouter);
 app.use("/productos", productosRouter);
 app.use("/instalaciones", instalacionesRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

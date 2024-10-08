@@ -19,12 +19,12 @@ const deleteUser = async (id) => {
   return result.rows[0];
 };
 
-const createUser = async (nombre, usuario, email, contraseña, rol) => {
+const createUser = async (nombre, usuario, email, contraseña, rol, estado) => {
   const hashedPassword = await bcrypt.hash(contraseña, 10);
 
   const result = await db.query(
-    "INSERT INTO usuarios (nombre, usuario, email, contraseña, rol) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-    [nombre, usuario, email, hashedPassword, rol]
+    "INSERT INTO usuarios (nombre, usuario, email, contraseña, rol, estado) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+    [nombre, usuario, email, hashedPassword, rol, estado]
   );
   return result.rows[0]; 
 };

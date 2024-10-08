@@ -47,9 +47,9 @@ const deleteUser = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
-  const { nombre, usuario, email, contraseña, rol } = req.body;
+  const { nombre, usuario, email, contraseña, rol, estado } = req.body;
   try {
-    const newUser = await usuariosModel.createUser(nombre, usuario, email, contraseña, rol);
+    const newUser = await usuariosModel.createUser(nombre, usuario, email, contraseña, rol, estado);
     res.status(201).json(newUser);
   } catch (error) {
     console.error(error);
@@ -66,15 +66,23 @@ const login = async (req, res) => {
   try {
     const user = await usuariosModel.authenticateUser(usuario, contraseña);
 
+    if (!user) {
+      return res.status(401).json({ message: "Credenciales incorrectas" });
+    }
+
     if (user) {
-      res.cookie(`admin-${user.usuario}`, true, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'Strict',
-        maxAge: 24 * 60 * 60 * 1000 // 1 dia de duracion
-      }); return res.status(200).json({ message: 'Inicio de sesión exitoso' });
+      console.log(`Usuario autenticado: ${user.usuario}`);
+      res.cookie(`sessionId-admin-${user.usuario}`, true, {
+        // httpOnly: true,
+        secure: true,  
+        sameSite: 'Lax',
+        maxAge: 24 * 60 * 60 * 1000, // 1 día de duración
+      });
+
+      return res.status(200).json({ message: "Inicio de sesión exitoso", user });
     } else {
-      return res.status(401).json({ message: 'Credenciales incorrectas' });
+      console.error("Error durante la autenticación:", error);
+      return res.status(401).json({ message: "Credenciales incorrectas" });
     }
   } catch (error) {
     console.error(error);
